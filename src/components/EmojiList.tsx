@@ -1,4 +1,3 @@
-import React, { useState, ChangeEvent } from "react";
 import { EmojiItem } from "../types/EmojiItem";
 
 type emojiListProps = {
