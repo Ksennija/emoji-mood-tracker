@@ -36,3 +36,27 @@
     transform: rotate(360deg);
   }
 }
+
+.reset-button {
+  padding: 5px;
+  margin-left: 10px;
+}
+
+.emoji-list li {
+  display:inline;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.emoji-icon {
+  width: 50%;
+}
+
+.mood-list li {
+  display: block;
+}
+
+.mood-list li span {
+  padding: 5px;
+}
+
