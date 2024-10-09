@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import { EmojiItem } from "../types/EmojiItem";
 import EmojiList from "./EmojiList";
@@ -16,22 +16,27 @@ const emojis = [
   {
     id: 128516,
     description: "rad",
+    selected: false,
   },
   {
     id: 128522,
     description: "good",
+    selected: false,
   },
   {
     id: 128528,
     description: "meh",
+    selected: false,
   },
   {
     id: 128530,
     description: "bad",
+    selected: false,
   },
   {
     id: 128541,
     description: "auful",
+    selected: false,
   },
 ];
 
@@ -43,17 +48,40 @@ const EmojiSelector = () => {
     setStartDate(new Date());
   };
 
-  const addItem = (event: React.MouseEvent<HTMLElement>): void => {
+  const selectEmoji = (event: React.MouseEvent<HTMLElement>): void => {
+    let selectedId = Number(
+      ((event.target as Element).parentElement as Element).id
+    );
+    emojis.forEach((item) => {
+      if (item.id === selectedId) {
+        item.selected = !item.selected;
+      } else {
+        item.selected = false;
+      }
+    });
+    setEmojiItems((items) => [...items]);
+  };
+
+  const addItem = (): void => {
+    let selectedItem = emojis.find((item) => item.selected !== false);
+    if (!selectedItem) {
+      return;
+    }
     const newItem: EmojiItem = {
       id: Date.now(),
       date: startDate,
-      emoji: Number(((event.target as Element).parentElement as Element).id),
+      emoji: selectedItem.id,
     };
     setEmojiItems((items) => [...items, newItem]);
   };
 
   const emojiPreviews = emojis.map((emoji) => (
-    <li key={"emoji" + emoji.id} id={emoji.id.toString()} onClick={addItem}>
+    <li
+      key={"emoji" + emoji.id}
+      id={emoji.id.toString()}
+      className={"emoji-container " + (emoji.selected ? "selected" : "")}
+      onClick={selectEmoji}
+    >
       <span className="emoji-icon">{String.fromCodePoint(emoji.id)}</span>
       <span className="emoji-description">{emoji.description}</span>
     </li>
@@ -68,12 +96,16 @@ const EmojiSelector = () => {
         todayButton="Today"
         showTimeSelect
         dateFormat="Pp"
+        timeFormat="HH:mm"
         timeIntervals={15}
       />
       <button className="reset-button" onClick={resetDate}>
         Now
       </button>
       <ul className="emoji-list">{emojiPreviews}</ul>
+      <button className="add-button" onClick={addItem}>
+        Submit
+      </button>
       <div>
         <EmojiList initialItems={emojiItems} />
       </div>

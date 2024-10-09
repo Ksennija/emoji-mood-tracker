@@ -48,6 +48,10 @@
   cursor: pointer;
 }
 
+.emoji-container.selected {
+  background-color: green;
+}
+
 .emoji-icon {
   width: 50%;
 }
