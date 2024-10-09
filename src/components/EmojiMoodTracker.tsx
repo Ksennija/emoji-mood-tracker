@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 
 import { EmojiItem } from "../types/EmojiItem";
 import EmojiList from "./EmojiList";
@@ -43,6 +43,7 @@ const emojis = [
 const EmojiSelector = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [emojiItems, setEmojiItems] = useState<EmojiItem[]>([]);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   const resetDate = (): void => {
     setStartDate(new Date());
@@ -53,8 +54,10 @@ const EmojiSelector = () => {
       ((event.target as Element).parentElement as Element).id
     );
     emojis.forEach((item) => {
+      let isSelected = !item.selected;
       if (item.id === selectedId) {
-        item.selected = !item.selected;
+        item.selected = isSelected;
+        setDisabled(!isSelected);
       } else {
         item.selected = false;
       }
@@ -65,6 +68,7 @@ const EmojiSelector = () => {
   const addItem = (): void => {
     let selectedItem = emojis.find((item) => item.selected !== false);
     if (!selectedItem) {
+      setDisabled(true);
       return;
     }
     const newItem: EmojiItem = {
@@ -103,7 +107,7 @@ const EmojiSelector = () => {
         Now
       </button>
       <ul className="emoji-list">{emojiPreviews}</ul>
-      <button className="add-button" onClick={addItem}>
+      <button className="add-button" disabled={disabled} onClick={addItem}>
         Submit
       </button>
       <div>
